@@ -20,6 +20,7 @@ export default function App() {
       const response = await axios.get(
         `https://api.unsplash.com/search/photos?page=${page}&query=${topic}&client_id=${KEY}`
       );
+      console.log(response.data.results)
       setPhotos(response.data.results);
     }
 
