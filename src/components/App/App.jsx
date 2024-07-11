@@ -19,6 +19,7 @@ export default function App() {
   const page = "1";
 
   useEffect(() => {
+    
     async function fetchArticles() {
       try{
         setLoading(true);
@@ -28,6 +29,7 @@ export default function App() {
       );
       setPhotos(response.data.results);} catch (error){
         setError(true);
+        
 
       }finally{setLoading(false);}
     }
