@@ -15,9 +15,7 @@ export default function App() {
     setSearchTopic(value);
   };
 
-  const KEY = "hz6DtNu86WDq2eHwrs231CdhsA0ERXri0mKKnpcZtbI";
-  const page = "1";
-
+  
   useEffect(() => {
     
     async function fetchArticles() {
