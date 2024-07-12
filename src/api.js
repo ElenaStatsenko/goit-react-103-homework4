@@ -6,6 +6,7 @@ const response = await axios.get("/search/photos", {
     params:{
         query: serchtopic,
         page: page,
+        per_page: 10,
         client_id:  ACCESS_KEY,
 
     },})

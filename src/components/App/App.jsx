@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
+import toast, { Toaster } from 'react-hot-toast';
 import ImageGallerry from "../ImageGallery/ImageGallery";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Loader from "../Loader/Loader";
@@ -17,17 +18,20 @@ export default function App() {
   };
 
   useEffect(()=>{
-  
+    if (searchTopic === ""){
+      toast.error("Form is epmty! Apply the form!!!");
+     } 
+    
     async function getPhotos(){
       if (searchTopic === ""){
         return
-       }
+       } 
     try{
       setLoading(true);
       const data = await fetchArticles(searchTopic);
       console.log(data);
-      setPhotos(data)
-      console.log(setPhotos)
+      setPhotos(data);
+      toast.success('Sucsess');
     } catch (error){
       setError(true);
     } finally{
@@ -45,4 +49,5 @@ export default function App() {
       {loading && <Loader/>}
       {error && <ErrorMessage/>}
       {photos.length > 0 && <ImageGallerry photos={photos} />}
+      <Toaster/>
     </div>)}
