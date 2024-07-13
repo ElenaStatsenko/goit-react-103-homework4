@@ -7,7 +7,7 @@ import Loader from "../Loader/Loader";
 
 export default function App() {
   const [photos, setPhotos] = useState([]);
-  const [searchTopic, setSearchTopic] = useState([]);
+  const [searchTopic, setSearchTopic] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -20,6 +20,7 @@ export default function App() {
 
   useEffect(() => {
     async function fetchArticles() {
+      
       try{
         setLoading(true);
         setError(false)
