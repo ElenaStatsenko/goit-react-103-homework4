@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import toast, { Toaster } from "react-hot-toast";
@@ -6,6 +5,7 @@ import ImageGallerry from "../ImageGallery/ImageGallery";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Loader from "../Loader/Loader";
 import { fetchArticles } from "../../api";
+import ModalComponent from "../Modal/ModalComponent";
 
 export default function App() {
   const [photos, setPhotos] = useState([]);
@@ -13,66 +13,36 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
-  
-  
-const handleSearch = async (newTopic) => {
-  setLoading(true);
-  setPhotos([]);
-  setPage(1)
-  setError(false);
-  setSearchTopic(newTopic)
-}
-//
-  // const handleSearch = (value) => {
-  //   setSearchTopic(value);
-  // };
-  // useEffect(() => {
-  //   if (searchTopic === "") {
-  //     toast.error("Form is epmty! Apply the form!!!");
-  //   }
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalLink, setModalLink] = useState("");
 
-  //   async function getPhotos() {
-  //     if (searchTopic === "") {
-  //       return;
-  //     }
-  //     try {
-  //       setLoading(true);
-  //       setPhotos([]);
-  //       setError(false);
-       
-  //       const data = await fetchArticles(searchTopic, page);
-
-  //       setPhotos(data);
-  //       toast.success("Sucsess");
-  //     } catch (error) {
-  //       setError(true);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   if (searchTopic) {
-  //     getPhotos();
-  //   }
-  // }, [searchTopic, page]);
+  const handleSearch = async (newTopic) => {
+    setLoading(true);
+    setPhotos([]);
+    setPage(1);
+    setError(false);
+    setSearchTopic(newTopic);
+  };
 
   const handleLoadMore = () => {
     setPage(page + 1);
   };
   useEffect(() => {
     if (searchTopic === "") {
-          toast.error("Form is epmty! Apply the form!!!");
-        }
+      return;
+    }
+    if (searchTopic === "") {
+      toast.error("Form is epmty! Apply the form!!!");
+    }
     async function getPhotos() {
-      if (searchTopic === "") {
-        return;
-      }
       try {
         setLoading(true);
 
         setError(false);
         const data = await fetchArticles(searchTopic, page);
-        setPhotos((prevPhotos)=>{
-          return[...prevPhotos, ...data]});
+        setPhotos((prevPhotos) => {
+          return [...prevPhotos, ...data];
+        });
       } catch (error) {
         setError(true);
       } finally {
@@ -81,14 +51,33 @@ const handleSearch = async (newTopic) => {
     }
     getPhotos();
   }, [searchTopic, page]);
+
+  const openModal = (value) => {
+    setModalIsOpen(true);
+    setModalLink(value);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      {photos.length > 0 && <ImageGallerry photos={photos} />}
+      {photos.length > 0 && (
+        <ImageGallerry openModal={openModal} photos={photos} />
+      )}
       <Toaster />
-      {photos.length > 0 && !loading &&  (<button onClick={handleLoadMore}>Load more</button>)}
+      {photos.length > 0 && !loading && (
+        <button onClick={handleLoadMore}>Load more</button>
+      )}
+      <ModalComponent
+        closeModal={closeModal}
+        modalLink={modalLink}
+        modalIsOpen={modalIsOpen}
+      />
     </div>
   );
 }
