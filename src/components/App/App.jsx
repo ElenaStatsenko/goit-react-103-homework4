@@ -17,7 +17,7 @@ export default function App() {
     setSearchTopic(value);
   };
 
-<<<<<<< HEAD
+
   const KEY = "hz6DtNu86WDq2eHwrs231CdhsA0ERXri0mKKnpcZtbI";
   const page = "1";
 
@@ -34,7 +34,6 @@ export default function App() {
         setError(true);
 
       }finally{setLoading(false);}
-=======
   useEffect(()=>{
     if (searchTopic === ""){
       toast.error("Form is epmty! Apply the form!!!");
@@ -57,7 +56,7 @@ export default function App() {
     }}
     if (searchTopic) {
       getPhotos();
->>>>>>> a1f8ac34c7e3efc0576c024477adc8a26a52676f
+
     }
   }, [searchTopic])
 
