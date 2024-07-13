@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
+import toast, { Toaster } from 'react-hot-toast';
 import ImageGallerry from "../ImageGallery/ImageGallery";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Loader from "../Loader/Loader";
+import { fetchArticles } from "../../api";
 
 export default function App() {
   const [photos, setPhotos] = useState([]);
@@ -15,6 +17,7 @@ export default function App() {
     setSearchTopic(value);
   };
 
+<<<<<<< HEAD
   const KEY = "hz6DtNu86WDq2eHwrs231CdhsA0ERXri0mKKnpcZtbI";
   const page = "1";
 
@@ -31,10 +34,33 @@ export default function App() {
         setError(true);
 
       }finally{setLoading(false);}
+=======
+  useEffect(()=>{
+    if (searchTopic === ""){
+      toast.error("Form is epmty! Apply the form!!!");
+     } 
+    
+    async function getPhotos(){
+      if (searchTopic === ""){
+        return
+       } 
+    try{
+      setLoading(true);
+      const data = await fetchArticles(searchTopic);
+      console.log(data);
+      setPhotos(data);
+      toast.success('Sucsess');
+    } catch (error){
+      setError(true);
+    } finally{
+      setLoading(false)
+    }}
+    if (searchTopic) {
+      getPhotos();
+>>>>>>> a1f8ac34c7e3efc0576c024477adc8a26a52676f
     }
+  }, [searchTopic])
 
-    fetchArticles();
-  }, [searchTopic]);
 
   return (
     <div>
@@ -42,4 +68,5 @@ export default function App() {
       {loading && <Loader/>}
       {error && <ErrorMessage/>}
       {photos.length > 0 && <ImageGallerry photos={photos} />}
+      <Toaster/>
     </div>)}
