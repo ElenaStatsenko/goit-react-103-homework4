@@ -1,9 +1,7 @@
 
 
 export default function SearchBar({ query, setQuery, handleSubmit }) {
-   
   
-
   return (
     <header>
       <form onSubmit={handleSubmit}>
