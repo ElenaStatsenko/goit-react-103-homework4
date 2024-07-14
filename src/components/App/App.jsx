@@ -9,49 +9,36 @@ import ModalComponent from "../Modal/ModalComponent";
 
 export default function App() {
   const [photos, setPhotos] = useState([]);
-  const [searchTopic, setSearchTopic] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalLink, setModalLink] = useState("");
-  const [query, setQuery] = useState("");
+  const [topic, setTopic] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-
-    if (query === "") {
-      toast.error("Form is empty! Apply the form!!!");
-      return;
-    }
-
-    handleSearch(query);
-    form.reset();
-    setQuery("");
-  };
-  const handleSearch = async (newTopic) => {
+  const handleSubmit = (value) => {
+    setTopic(value);
+    setError(false);
     setLoading(true);
     setPhotos([]);
     setPage(1);
-    setError(false);
-    setSearchTopic(newTopic);
   };
 
   const handleLoadMore = () => {
     setPage(page + 1);
   };
+  
   useEffect(() => {
-    if (searchTopic === "") {
-      // Добавлено условие для игнорирования первоначальной загрузки
+    if (topic === "") {
       return;
     }
+
     async function getPhotos() {
       try {
         setLoading(true);
 
         setError(false);
-        const data = await fetchArticles(searchTopic, page);
+        const data = await fetchArticles(topic, page);
         setPhotos((prevPhotos) => {
           return [...prevPhotos, ...data];
         });
@@ -62,7 +49,7 @@ export default function App() {
       }
     }
     getPhotos();
-  }, [searchTopic, page]);
+  }, [topic, page]);
 
   const openModal = (value) => {
     setModalIsOpen(true);
@@ -75,11 +62,7 @@ export default function App() {
 
   return (
     <div>
-      <SearchBar
-        query={query}
-        setQuery={setQuery}
-        handleSubmit={handleSubmit}
-      />
+      <SearchBar handleSubmit={handleSubmit} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
       {photos.length > 0 && (

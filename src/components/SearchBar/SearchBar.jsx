@@ -1,15 +1,19 @@
+export default function SearchBar({ handleSubmit }) {
+  const getTopic = (evt) => {
+    evt.preventDefault();
+    const form = evt.target;
+    const topic = form.elements.topic.value;
+    handleSubmit(topic);
+    form.reset();
+  };
 
-
-export default function SearchBar({ query, setQuery, handleSubmit }) {
-  
   return (
     <header>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={getTopic}>
         <input
           type="text"
-          value={query}
-          onChange={(evt) => setQuery(evt.target.value)}
           placeholder="Search images and photos"
+          name="topic"
         />
         <button type="submit">Search</button>
       </form>
