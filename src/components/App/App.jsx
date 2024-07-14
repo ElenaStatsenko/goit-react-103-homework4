@@ -7,6 +7,7 @@ import Loader from "../Loader/Loader";
 import { fetchArticles } from "../../api";
 import ModalComponent from "../Modal/ModalComponent";
 
+
 export default function App() {
   const [photos, setPhotos] = useState([]);
   const [searchTopic, setSearchTopic] = useState("");
@@ -15,7 +16,17 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalLink, setModalLink] = useState("");
+  const [query, setQuery] = useState("");
+  
 
+  const handleSubmit = async(event) => {
+    event.preventDefault();
+    if (query === "") {
+      toast.error("Form is empty! Apply the form!!!");
+      return;
+    }
+    handleSearch(query);
+  };
   const handleSearch = async (newTopic) => {
     setLoading(true);
     setPhotos([]);
@@ -28,11 +39,8 @@ export default function App() {
     setPage(page + 1);
   };
   useEffect(() => {
-    if (searchTopic === "") {
+    if (searchTopic === "") { // Добавлено условие для игнорирования первоначальной загрузки
       return;
-    }
-    if (searchTopic === "") {
-      toast.error("Form is epmty! Apply the form!!!");
     }
     async function getPhotos() {
       try {
@@ -63,7 +71,12 @@ export default function App() {
 
   return (
     <div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar
+        
+        query={query}
+        setQuery={setQuery}
+        handleSubmit={handleSubmit}
+      />
       {loading && <Loader />}
       {error && <ErrorMessage />}
       {photos.length > 0 && (
